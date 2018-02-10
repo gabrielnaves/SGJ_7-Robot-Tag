@@ -2,17 +2,19 @@ local robot = {}
 
 -- Image data
 robot.img = love.graphics.newImage('assets/robot.png')
-robot.num_frames = 2
+robot.num_frames = 4
 robot.frame_width = robot.img:getWidth() / robot.num_frames
 robot.frame_height = robot.img:getHeight()
 robot.frames = {
-    love.graphics.newQuad(0, 0, robot.frame_width, robot.frame_height, robot.img:getWidth(), robot.img:getHeight()),
-    love.graphics.newQuad(robot.frame_width, 0, robot.frame_width, robot.frame_height, robot.img:getWidth(), robot.img:getHeight()),
+    love.graphics.newQuad(robot.frame_width*0, 0, robot.frame_width, robot.frame_height, robot.img:getWidth(), robot.img:getHeight()),
+    love.graphics.newQuad(robot.frame_width*1, 0, robot.frame_width, robot.frame_height, robot.img:getWidth(), robot.img:getHeight()),
+    love.graphics.newQuad(robot.frame_width*2, 0, robot.frame_width, robot.frame_height, robot.img:getWidth(), robot.img:getHeight()),
+    love.graphics.newQuad(robot.frame_width*3, 0, robot.frame_width, robot.frame_height, robot.img:getWidth(), robot.img:getHeight()),
 }
 robot.flip = false
 
 -- Motion data
-robot.rect = geometry.makeRect(measure.screen_width/2, measure.screen_height-2, robot.frame_width, robot.frame_height, 0.5, 1)
+robot.rect = geometry.makeRect(measure.screen_width/2, measure.screen_height-4, robot.frame_width, robot.frame_height, 0.5, 1)
 robot.gravity = 4000
 robot.max_speed = 400
 robot.offset_bound = 20
@@ -137,7 +139,7 @@ function robot:updatePosition(dt)
         self.velocity.x = 0
     end
     if self.rect.y > measure.screen_height then
-        self.rect.y = measure.screen_height
+        self.rect.y = measure.screen_height - 4
         self.velocity.y = 0
         self.double_jump = true
         self:changeState(self.states.grounded, self.updateGrounded)
@@ -153,10 +155,11 @@ function robot:updateFlip(dt)
 end
 
 function robot:draw()
-    local draw_x = self.rect.x - self.rect.width*self.rect.pivotX
-    local draw_y = self.rect.y - self.rect.height*self.rect.pivotY
+    local draw_x = math.floor(self.rect.x - self.rect.width*self.rect.pivotX)
+    local draw_y = math.floor(self.rect.y - self.rect.height*self.rect.pivotY)
     local frame = 1
-    if self.flip then frame = 2 end
+    if self.input:horizontalAxis() ~= 0 then frame = 2 end
+    if self.flip then frame = frame + self.num_frames/2 end
     love.graphics.draw(self.img, self.frames[frame], draw_x, draw_y)
     love.graphics.print({{0, 0, 0},tostring(self.state)}, draw_x, draw_y - 25)
 end
