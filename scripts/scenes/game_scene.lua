@@ -3,26 +3,44 @@ require("scripts.game_scene.robot_bulb")
 local game_scene = {}
 
 game_scene.name = 'game'
+game_scene.robot_data = {
+    {
+        img = 'assets/robot_blue.png',
+        x = measure.screen_width/4,
+        y = measure.screen_height-4,
+        input = newInputHandler('w', 's', 'a', 'd', 'space', 'lshift'),
+        flip = false
+    },
+    {
+        img = 'assets/robot_red.png',
+        x = 3*measure.screen_width/4,
+        y = measure.screen_height-4,
+        input = newInputHandler('up', 'down', 'left', 'right', 'l', 'k'),
+        flip = true
+    }
+}
 
 function game_scene:load()
-    self.blue_robot = require('scripts.game_scene.robot')
-    self.blue_robot:load('assets/robot_blue.png', measure.screen_width/4, measure.screen_height-4)
-    self.blue_robot.input = newInputHandler('w', 's', 'a', 'd', 'space', 'lshift')
-    package.loaded['scripts.game_scene.robot'] = nil
-    self.red_robot = require('scripts.game_scene.robot')
-    self.red_robot:load('assets/robot_red.png', 3*measure.screen_width/4, measure.screen_height-4)
-    self.red_robot.flip = true
-    self.red_robot.input = newInputHandler('up', 'down', 'left', 'right', 'l', 'k')
+    self.robots = {}
+    for i, data in ipairs(self.robot_data) do
+        self.robots[i] = require('scripts.game_scene.robot')
+        self.robots[i]:load(data.img, data.x, data.y)
+        self.robots[i].input = data.input
+        self.robots[i].flip = data.flip
+        package.loaded['scripts.game_scene.robot'] = nil
+    end
 end
 
 function game_scene:update(dt)
-    self.blue_robot:update(dt)
-    self.red_robot:update(dt)
+    for i, robot in ipairs(self.robots) do
+        robot:update(dt)
+    end
 end
 
 function game_scene:draw(dt)
-    self.blue_robot:draw()
-    self.red_robot:draw()
+    for i, robot in ipairs(self.robots) do
+        robot:draw()
+    end
 end
 
 function game_scene:restart()
