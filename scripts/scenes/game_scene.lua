@@ -1,3 +1,5 @@
+require("scripts.game_scene.robot_bulb")
+
 local game_scene = {}
 
 game_scene.name = 'game'

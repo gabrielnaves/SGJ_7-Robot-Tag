@@ -1,7 +1,7 @@
 local robot = {}
 
 -- Image data
-robot.img = love.graphics.newImage('assets/robot.png')
+robot.img = love.graphics.newImage('assets/robot_blue.png')
 robot.num_frames = 4
 robot.frame_width = robot.img:getWidth() / robot.num_frames
 robot.frame_height = robot.img:getHeight()
@@ -100,6 +100,7 @@ function robot:updateDashing(dt)
     self.velocity.y = self.dashSpeed * self.dashDirection.y
     self.dashTimer = self.dashTimer + dt
     if self.dashTimer >= self.dashDuration then
+        self.dashTimer = 0
         self.velocity.y = self.velocity.y / 2
         self:changeState(self.states.falling, self.updateFalling)
     end
@@ -161,7 +162,17 @@ function robot:draw()
     if self.input:horizontalAxis() ~= 0 then frame = 2 end
     if self.flip then frame = frame + self.num_frames/2 end
     love.graphics.draw(self.img, self.frames[frame], draw_x, draw_y)
+    self:drawBulb(frame, draw_x, draw_y)
     love.graphics.print({{0, 0, 0},tostring(self.state)}, draw_x, draw_y - 25)
+end
+
+function robot:drawBulb(frame, x, y)
+    if self.state == self.states.dashing then
+        frame = frame + 4
+    elseif self.dashTimer >= self.dashCooldown then
+        frame = frame + 4
+    end
+    robot_bulb.draw(frame, x, y)
 end
 
 
