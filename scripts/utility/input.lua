@@ -1,11 +1,12 @@
 -- Player-specific input
-function newInputHandler(up, down, left, right, jump)
+function newInputHandler(up, down, left, right, jump, dash)
     return {
         up = up,
         down = down,
         left = left,
         right = right,
         jump = jump,
+        dash = dash,
 
         verticalAxis = function(self)
             local result = 0
@@ -23,7 +24,7 @@ function newInputHandler(up, down, left, right, jump)
 
         jumpButton = false,
         jumpButtonDown = false,
-        update = function(self)
+        updateJump = function(self)
             local jump = love.keyboard.isDown(jump)
             if not self.jumpButton and jump then
                 self.jumpButtonDown = true
@@ -32,6 +33,23 @@ function newInputHandler(up, down, left, right, jump)
             end
             self.jumpButton = jump
         end,
+
+        dashButton = false,
+        dashButtonDown = false,
+        updateDash = function(self)
+            local dash = love.keyboard.isDown(dash)
+            if not self.dashButton and dash then
+                self.dashButtonDown = true
+            else
+                self.dashButtonDown = false
+            end
+            self.dashButton = dash
+        end,
+
+        update = function(self)
+            self:updateJump()
+            self:updateDash()
+        end
     }
 end
 

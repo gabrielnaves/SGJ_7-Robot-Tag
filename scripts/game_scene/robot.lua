@@ -20,15 +20,25 @@ robot.velocity = geometry.makePoint(0, 0)
 robot.acceleration = geometry.makePoint(1000, 0)
 robot.mov_decay = 0.75
 robot.double_jump = true
+robot.dashDirection = nil
+robot.dashSpeed = 1000
 
 -- State data
-robot.states = { grounded='grounded', ascending='ascending', falling='falling' }
+robot.states = {
+    grounded = 'grounded',
+    ascending = 'ascending',
+    falling = 'falling',
+    dashing = 'dashing'
+}
 robot.state = nil
 robot.updateFunction = nil
 
 -- Timers
 robot.ascendTime = 0.1
 robot.ascendTimer = 0
+robot.dashCooldown = 1.5
+robot.dashDuration = 0.25
+robot.dashTimer = 2
 
 function robot:load()
     self:changeState(self.states.grounded, self.updateGrounded)
@@ -42,8 +52,21 @@ end
 
 function robot:update(dt)
     self.input:update()
+    self:checkDash(dt)
     self:updateFunction(dt)
     self:updateBasicMotion(dt)
+end
+
+function robot:checkDash(dt)
+    if self.state ~= self.states.dashing then
+        self.dashTimer = self.dashTimer + dt
+        if self.input.dashButtonDown and self.dashTimer > self.dashCooldown then
+            self.dashTimer = 0
+            self.dashDirection = geometry.makePoint(self.input:horizontalAxis(), self.input:verticalAxis())
+            self.velocity = geometry.makePoint(0, 0)
+            self:changeState(self.states.dashing, self.updateDashing)
+        end
+    end
 end
 
 function robot:updateGrounded(dt)
@@ -70,6 +93,16 @@ function robot:updateFalling(dt)
     end
 end
 
+function robot:updateDashing(dt)
+    self.velocity.x = self.dashSpeed * self.dashDirection.x
+    self.velocity.y = self.dashSpeed * self.dashDirection.y
+    self.dashTimer = self.dashTimer + dt
+    if self.dashTimer >= self.dashDuration then
+        self.velocity.y = self.velocity.y / 2
+        self:changeState(self.states.falling, self.updateFalling)
+    end
+end
+
 function robot:updateBasicMotion(dt)
     self:updateHorizontalVelocity(dt)
     self:updatePosition(dt)
@@ -77,17 +110,19 @@ function robot:updateBasicMotion(dt)
 end
 
 function robot:updateHorizontalVelocity(dt)
-    local acc = self.input:horizontalAxis() * self.acceleration.x
-    if (acc > 0 and self.velocity.x > 0) or (acc < 0 and self.velocity.x < 0) then
-        self.velocity.x = self.velocity.x + acc * dt
-    elseif acc ~= 0 then
-        self.velocity.x = self.velocity.x * self.mov_decay
-        self.velocity.x = self.velocity.x + acc * dt
-    else
-        self.velocity.x = self.velocity.x * self.mov_decay
+    if self.state ~= self.states.dashing then
+        local acc = self.input:horizontalAxis() * self.acceleration.x
+        if (acc > 0 and self.velocity.x > 0) or (acc < 0 and self.velocity.x < 0) then
+            self.velocity.x = self.velocity.x + acc * dt
+        elseif acc ~= 0 then
+            self.velocity.x = self.velocity.x * self.mov_decay
+            self.velocity.x = self.velocity.x + acc * dt
+        else
+            self.velocity.x = self.velocity.x * self.mov_decay
+        end
+        self.velocity.x = self.velocity.x + dt * acc
+        self.velocity.x = gamemath.clamp(self.velocity.x, self.max_speed, -self.max_speed)
     end
-    self.velocity.x = self.velocity.x + dt * acc
-    self.velocity.x = gamemath.clamp(self.velocity.x, self.max_speed, -self.max_speed)
 end
 
 function robot:updatePosition(dt)
