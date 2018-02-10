@@ -1,7 +1,9 @@
 require("scripts.utility.debug")
 require("scripts.utility.measure")
+require("scripts.utility.gamemath")
 require("scripts.utility.geometry")
 require("scripts.utility.still_image")
+require("scripts.utility.input")
 
 local background = nil
 
@@ -12,14 +14,15 @@ function love.load(arg)
 end
 
 function love.update(dt)
+    mouse:update()
     if current_scene ~= nil then
-        current_scene:update()
+        current_scene:update(dt)
     end
 end
 
 function love.draw(dt)
     background:draw()
     if current_scene ~= nil then
-        current_scene:draw()
+        current_scene:draw(dt)
     end
 end
