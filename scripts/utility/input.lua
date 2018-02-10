@@ -1,10 +1,11 @@
 -- Player-specific input
-function newInputHandler(up, down, left, right)
+function newInputHandler(up, down, left, right, jump)
     return {
         up = up,
         down = down,
         left = left,
         right = right,
+        jump = jump,
 
         verticalAxis = function(self)
             local result = 0
@@ -18,7 +19,19 @@ function newInputHandler(up, down, left, right)
             if love.keyboard.isDown(self.left) then result = result - 1 end
             if love.keyboard.isDown(self.right) then result = result + 1 end
             return result
-        end
+        end,
+
+        jumpButton = false,
+        jumpButtonDown = false,
+        update = function(self)
+            local jump = love.keyboard.isDown(jump)
+            if not self.jumpButton and jump then
+                self.jumpButtonDown = true
+            else
+                self.jumpButtonDown = false
+            end
+            self.jumpButton = jump
+        end,
     }
 end
 

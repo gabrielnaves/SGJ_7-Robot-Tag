@@ -4,7 +4,7 @@ game_scene.name = 'game'
 
 function game_scene:load()
     self.robot = require('scripts.game_scene.robot')
-    self.robot.input = newInputHandler('w', 's', 'a', 'd')
+    self.robot.input = newInputHandler('w', 's', 'a', 'd', 'space')
 end
 
 function game_scene:update(dt)

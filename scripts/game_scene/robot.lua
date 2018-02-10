@@ -13,20 +13,70 @@ robot.flip = false
 
 -- Motion data
 robot.rect = geometry.makeRect(measure.screen_width/2, measure.screen_height-2, robot.frame_width, robot.frame_height, 0.5, 1)
-robot.gravity = 100
+robot.gravity = 4000
 robot.max_speed = 400
 robot.offset_bound = 20
 robot.velocity = geometry.makePoint(0, 0)
 robot.acceleration = geometry.makePoint(1000, 0)
 robot.mov_decay = 0.75
+robot.double_jump = true
+
+-- State data
+robot.states = { grounded='grounded', ascending='ascending', falling='falling' }
+robot.state = nil
+robot.updateFunction = nil
+
+-- Timers
+robot.ascendTime = 0.1
+robot.ascendTimer = 0
+
+function robot:load()
+    self:changeState(self.states.grounded, self.updateGrounded)
+end
+
+function robot:changeState(state, updateFunction)
+    self.state = state
+    self.updateFunction = updateFunction
+    self.ascendTimer = 0
+end
 
 function robot:update(dt)
-    self:updateVelocity(dt)
+    self.input:update()
+    self:updateFunction(dt)
+    self:updateBasicMotion(dt)
+end
+
+function robot:updateGrounded(dt)
+    if self.input.jumpButtonDown then
+        self.velocity.y = -1000
+        self:changeState(self.states.ascending, self.updateAscending)
+    end
+end
+
+function robot:updateAscending(dt)
+    self.ascendTimer = self.ascendTimer + dt
+    if self.ascendTimer >= self.ascendTime or not self.input.jumpButton then
+        self.velocity.y = self.velocity.y / 2
+        self:changeState(self.states.falling, self.updateFalling)
+    end
+end
+
+function robot:updateFalling(dt)
+    self.velocity.y = self.velocity.y + self.gravity * dt
+    if self.double_jump and self.input.jumpButtonDown then
+        self.velocity.y = -1000
+        self.double_jump = false
+        self:changeState(self.states.ascending, self.updateAscending)
+    end
+end
+
+function robot:updateBasicMotion(dt)
+    self:updateHorizontalVelocity(dt)
     self:updatePosition(dt)
     self:updateFlip(dt)
 end
 
-function robot:updateVelocity(dt)
+function robot:updateHorizontalVelocity(dt)
     local acc = self.input:horizontalAxis() * self.acceleration.x
     if (acc > 0 and self.velocity.x > 0) or (acc < 0 and self.velocity.x < 0) then
         self.velocity.x = self.velocity.x + acc * dt
@@ -51,6 +101,12 @@ function robot:updatePosition(dt)
         self.rect.x = measure.screen_width - self.offset_bound
         self.velocity.x = 0
     end
+    if self.rect.y > measure.screen_height then
+        self.rect.y = measure.screen_height
+        self.velocity.y = 0
+        self.double_jump = true
+        self:changeState(self.states.grounded, self.updateGrounded)
+    end
 end
 
 function robot:updateFlip(dt)
@@ -67,6 +123,9 @@ function robot:draw()
     local frame = 1
     if self.flip then frame = 2 end
     love.graphics.draw(self.img, self.frames[frame], draw_x, draw_y)
+    love.graphics.print({{0, 0, 0},tostring(self.state)}, draw_x, draw_y - 25)
 end
 
+
+robot:load()
 return robot
