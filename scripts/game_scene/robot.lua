@@ -1,48 +1,48 @@
 local robot = {}
 
--- Image data
-robot.img = love.graphics.newImage('assets/robot_blue.png')
-robot.num_frames = 4
-robot.frame_width = robot.img:getWidth() / robot.num_frames
-robot.frame_height = robot.img:getHeight()
-robot.frames = {
-    love.graphics.newQuad(robot.frame_width*0, 0, robot.frame_width, robot.frame_height, robot.img:getWidth(), robot.img:getHeight()),
-    love.graphics.newQuad(robot.frame_width*1, 0, robot.frame_width, robot.frame_height, robot.img:getWidth(), robot.img:getHeight()),
-    love.graphics.newQuad(robot.frame_width*2, 0, robot.frame_width, robot.frame_height, robot.img:getWidth(), robot.img:getHeight()),
-    love.graphics.newQuad(robot.frame_width*3, 0, robot.frame_width, robot.frame_height, robot.img:getWidth(), robot.img:getHeight()),
-}
-robot.flip = false
+function robot:load(robot_image, x, y)
+    -- Image data
+    self.img = love.graphics.newImage(robot_image)
+    self.num_frames = 4
+    self.frame_width = self.img:getWidth() / self.num_frames
+    self.frame_height = self.img:getHeight()
+    self.frames = {
+        love.graphics.newQuad(self.frame_width*0, 0, self.frame_width, self.frame_height, self.img:getWidth(), self.img:getHeight()),
+        love.graphics.newQuad(self.frame_width*1, 0, self.frame_width, self.frame_height, self.img:getWidth(), self.img:getHeight()),
+        love.graphics.newQuad(self.frame_width*2, 0, self.frame_width, self.frame_height, self.img:getWidth(), self.img:getHeight()),
+        love.graphics.newQuad(self.frame_width*3, 0, self.frame_width, self.frame_height, self.img:getWidth(), self.img:getHeight()),
+    }
+    self.flip = false
 
--- Motion data
-robot.rect = geometry.makeRect(measure.screen_width/2, measure.screen_height-4, robot.frame_width, robot.frame_height, 0.5, 1)
-robot.gravity = 4000
-robot.max_speed = 400
-robot.offset_bound = 20
-robot.velocity = geometry.makePoint(0, 0)
-robot.acceleration = geometry.makePoint(1000, 0)
-robot.mov_decay = 0.75
-robot.double_jump = true
-robot.dashDirection = nil
-robot.dashSpeed = 1000
+    -- Motion data
+    self.rect = geometry.makeRect(x, y, self.frame_width, self.frame_height, 0.5, 1)
+    self.gravity = 4000
+    self.max_speed = 400
+    self.offset_bound = 20
+    self.velocity = geometry.makePoint(0, 0)
+    self.acceleration = geometry.makePoint(1000, 0)
+    self.mov_decay = 0.75
+    self.double_jump = true
+    self.dashDirection = nil
+    self.dashSpeed = 1000
 
--- State data
-robot.states = {
-    grounded = 'grounded',
-    ascending = 'ascending',
-    falling = 'falling',
-    dashing = 'dashing'
-}
-robot.state = nil
-robot.updateFunction = nil
+    -- State data
+    self.states = {
+        grounded = 'grounded',
+        ascending = 'ascending',
+        falling = 'falling',
+        dashing = 'dashing'
+    }
+    self.state = nil
+    self.updateFunction = nil
 
--- Timers
-robot.ascendTime = 0.1
-robot.ascendTimer = 0
-robot.dashCooldown = 1.5
-robot.dashDuration = 0.25
-robot.dashTimer = 2
+    -- Timers
+    self.ascendTime = 0.1
+    self.ascendTimer = 0
+    self.dashCooldown = 1.5
+    self.dashDuration = 0.25
+    self.dashTimer = 2
 
-function robot:load()
     self:changeState(self.states.grounded, self.updateGrounded)
 end
 
@@ -175,6 +175,4 @@ function robot:drawBulb(frame, x, y)
     robot_bulb.draw(frame, x, y)
 end
 
-
-robot:load()
 return robot
