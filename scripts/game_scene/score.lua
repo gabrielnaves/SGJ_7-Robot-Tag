@@ -3,12 +3,12 @@ score = {}
 score.scores = {
     {
         tag_time = 0,
-        color = { 35, 35, 75 },
+        color = { 65, 150, 220 },
         pos = geometry.makePoint(measure.screen_width/5, 20),
     },
     {
         tag_time = 0,
-        color = { 109, 32, 32 },
+        color = { 240, 75, 54 },
         pos = geometry.makePoint(4 * measure.screen_width/5, 20),
     }
 }
