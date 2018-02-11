@@ -43,6 +43,9 @@ function robot:load(robot_image, x, y)
     self.dashDuration = 0.25
     self.dashTimer = 2
 
+    -- Tag
+    self.tagged = false
+
     self:changeState(self.states.grounded, self.updateGrounded)
 end
 
@@ -155,15 +158,18 @@ function robot:updateFlip(dt)
     end
 end
 
-function robot:draw()
+function robot:draw(dt)
     local draw_x = math.floor(self.rect.x - self.rect.width*self.rect.pivotX)
     local draw_y = math.floor(self.rect.y - self.rect.height*self.rect.pivotY)
     local frame = 1
+
     if self.input:horizontalAxis() ~= 0 then frame = 2 end
     if self.flip then frame = frame + self.num_frames/2 end
-    love.graphics.draw(self.img, self.frames[frame], draw_x, draw_y)
+
+    self:drawTag(dt)
     self:drawBulb(frame, draw_x, draw_y)
-    love.graphics.print({{0, 0, 0},tostring(self.state)}, draw_x, draw_y - 25)
+    love.graphics.draw(self.img, self.frames[frame], draw_x, draw_y)
+    -- love.graphics.print({{0, 0, 0},tostring(self.state)}, draw_x, draw_y - 25)
 end
 
 function robot:drawBulb(frame, x, y)
@@ -173,6 +179,13 @@ function robot:drawBulb(frame, x, y)
         frame = frame + 4
     end
     robot_bulb.draw(frame, x, y)
+end
+
+function robot:drawTag(dt)
+    if self.tagged then
+        tag_mark:setPosition(self.rect.x, self.rect.y - 60)
+        tag_mark:draw(dt)
+    end
 end
 
 return robot
