@@ -56,7 +56,9 @@ function platforms:update(robots)
                         robot:changeState(robot.states.falling, robot.updateFalling)
                     end
                 else
-                    debug.log("Unknown collision detected")
+                    robot.rect.y = platform.rect.y
+                    robot.velocity.y = 0
+                    robot:changeState(robot.states.grounded, robot.updateGrounded)
                 end
             end
         end
