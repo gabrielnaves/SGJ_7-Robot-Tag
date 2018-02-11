@@ -39,6 +39,11 @@ menu_scene.left_arrow_rect = geometry.makeRect(menu_scene.left_arrow.x, menu_sce
 
 menu_scene.player_amount = 2
 
+menu_scene.play_button = still_image.new('play_button.png', measure.screen_width/2, measure.screen_height - 50, 0.5, 0.5)
+menu_scene.play_rect = geometry.makeRect(menu_scene.play_button.x, menu_scene.play_button.y,
+                                         menu_scene.play_button.width, menu_scene.play_button.height,
+                                         menu_scene.play_button.pivotX, menu_scene.play_button.pivotY)
+
 function menu_scene:update(dt)
     if mouse.mouseButtonDown then
         if geometry.isPointInRect(geometry.makePoint(mouse.mouseX, mouse.mouseY), self.right_arrow_rect) then
@@ -59,6 +64,7 @@ function menu_scene:draw()
     self.left_arrow:draw()
     self:drawPlayerAmount()
     self:drawPlayerInputs()
+    self:drawPlayButton()
 end
 
 function menu_scene:drawPlayerAmount()
@@ -76,6 +82,14 @@ function menu_scene:drawPlayerInputs()
                             math.floor(draw_x), draw_y)
         draw_y = draw_y + 30
     end
+end
+
+function menu_scene:drawPlayButton()
+    self.play_button:draw()
+    local play_text = "Play"
+    local draw_x = measure.screen_width/2 - font:getWidth(play_text)
+    local draw_y = self.play_button.y - font:getHeight(play_text)
+    love.graphics.print({{0, 0, 0}, tostring(play_text)}, math.floor(draw_x), math.floor(draw_y), 0, 2, 2)
 end
 
 return menu_scene
