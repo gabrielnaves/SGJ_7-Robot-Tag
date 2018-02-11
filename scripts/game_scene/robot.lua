@@ -62,7 +62,7 @@ function robot:update(dt)
     self:checkDash(dt)
     self:updateFunction(dt)
     self:updateBasicMotion(dt)
-    self:collideWithRobots(dt)
+    self:updateTag(dt)
 end
 
 function robot:checkDash(dt)
@@ -161,7 +161,7 @@ function robot:updateFlip(dt)
     end
 end
 
-function robot:collideWithRobots(dt)
+function robot:updateTag(dt)
     if not self.tagged then return end
     if current_scene == nil then return end
     if current_scene.name ~= 'game' then return end
@@ -192,7 +192,7 @@ function robot:draw(dt)
     self:drawTag(dt)
     self:drawBulb(frame, draw_x, draw_y)
     love.graphics.draw(self.img, self.frames[frame], draw_x, draw_y)
-    -- love.graphics.print({{0, 0, 0},tostring(self.state)}, draw_x, draw_y - 25)
+    -- love.graphics.print({{255, 255, 255}, tostring(self.state)}, draw_x, draw_y - 25)
 end
 
 function robot:drawBulb(frame, x, y)

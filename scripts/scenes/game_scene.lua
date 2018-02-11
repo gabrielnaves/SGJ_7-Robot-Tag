@@ -1,5 +1,6 @@
 require("scripts.game_scene.robot_bulb")
 require("scripts.game_scene.tag_mark")
+require("scripts.game_scene.score")
 
 local game_scene = {}
 
@@ -37,6 +38,7 @@ function game_scene:load()
 end
 
 function game_scene:update(dt)
+    score:update(dt)
     for i, robot in ipairs(self.robots) do
         robot:update(dt)
     end
@@ -47,6 +49,7 @@ function game_scene:draw(dt)
     for i, robot in ipairs(self.robots) do
         robot:draw(dt)
     end
+    score:draw()
 end
 
 function game_scene:restart()
