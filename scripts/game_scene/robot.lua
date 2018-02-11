@@ -181,7 +181,7 @@ function robot:updateTag(dt)
     end
 end
 
-function robot:draw(dt)
+function robot:draw()
     local draw_x = math.floor(self.rect.x - self.frame_width / 2)
     local draw_y = math.floor(self.rect.y - self.frame_height)
     local frame = 1
@@ -189,7 +189,7 @@ function robot:draw(dt)
     if self.input:horizontalAxis() ~= 0 then frame = 2 end
     if self.flip then frame = frame + self.num_frames/2 end
 
-    self:drawTag(dt)
+    self:drawTag()
     self:drawBulb(frame, draw_x, draw_y)
     love.graphics.draw(self.img, self.frames[frame], draw_x, draw_y)
     -- love.graphics.print({{255, 255, 255}, tostring(self.state)}, draw_x, draw_y - 25)
@@ -204,10 +204,10 @@ function robot:drawBulb(frame, x, y)
     robot_bulb.draw(frame, x, y)
 end
 
-function robot:drawTag(dt)
+function robot:drawTag()
     if self.tagged then
         tag_mark:setPosition(self.rect.x, self.rect.y - 60)
-        tag_mark:draw(dt)
+        tag_mark:draw()
     end
 end
 
