@@ -24,7 +24,9 @@ function love.update(dt)
     mouse:update()
     if current_scene ~= nil then
         current_scene:update(dt)
-        current_scene:lateUpdate(dt)
+        if current_scene.lateUpdate ~= nil then
+            current_scene:lateUpdate(dt)
+        end
     end
 end
 
