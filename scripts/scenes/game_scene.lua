@@ -9,16 +9,30 @@ game_scene.name = 'game'
 game_scene.robot_data = {
     {
         img = 'assets/robot_blue.png',
-        x = measure.screen_width/4,
+        x = 50,
         y = measure.screen_height-4,
         input = newInputHandler('w', 's', 'a', 'd', 'space', 'lshift'),
         flip = false
     },
     {
         img = 'assets/robot_red.png',
-        x = 3*measure.screen_width/4,
+        x = measure.screen_width - 50,
         y = measure.screen_height-4,
-        input = newInputHandler('up', 'down', 'left', 'right', 'l', 'k'),
+        input = newInputHandler('up', 'down', 'left', 'right', 'm', 'n'),
+        flip = true
+    },
+    {
+        img = 'assets/robot_blue.png',
+        x = 50,
+        y = 219,
+        input = newInputHandler('t', 'g', 'f', 'h', 'c', 'x'),
+        flip = false
+    },
+    {
+        img = 'assets/robot_blue.png',
+        x = measure.screen_width - 50,
+        y = 147,
+        input = newInputHandler('i', 'k', 'j', 'l', 'b', 'v'),
         flip = true
     }
 }
