@@ -23,6 +23,9 @@ score.scores = {
     }
 }
 
+score.time = 121
+score.timer = score.time
+
 function score:update(dt)
     if current_scene == nil then return end
     if current_scene.name ~= 'game' then return end
@@ -32,6 +35,7 @@ function score:update(dt)
             score.tag_time = score.tag_time + dt
         end
     end
+    self.timer = self.timer - dt
 end
 
 function score:draw()
@@ -41,4 +45,11 @@ function score:draw()
         local draw_x = math.floor(score.pos.x - font:getWidth(text) / 2)
         love.graphics.print({score.color, text}, draw_x, score.pos.y)
     end
+    self:drawGameTime()
+end
+
+function score:drawGameTime()
+    local text = tostring(math.floor(self.timer))
+    local draw_x = measure.screen_width/2 - font:getWidth(text)
+    love.graphics.print({{255, 255, 255}, text}, draw_x, 10, 0, 2, 2)
 end
