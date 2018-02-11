@@ -9,6 +9,16 @@ score.scores = {
     {
         tag_time = 0,
         color = { 240, 75, 54 },
+        pos = geometry.makePoint(2 * measure.screen_width/5, 20),
+    },
+    {
+        tag_time = 0,
+        color = { 59, 246, 83 },
+        pos = geometry.makePoint(3 * measure.screen_width/5, 20),
+    },
+    {
+        tag_time = 0,
+        color = { 240, 120, 215 },
         pos = geometry.makePoint(4 * measure.screen_width/5, 20),
     }
 }
