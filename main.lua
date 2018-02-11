@@ -9,6 +9,12 @@ require("scripts.utility.input")
 local background = nil
 
 function love.load(arg)
+    local font = love.graphics.newImageFont("assets/font.png",
+        " abcdefghijklmnopqrstuvwxyz" ..
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ..
+        "0123456789")
+    love.graphics.setFont(font)
+
     background = still_image.new('background.png')
 
     current_scene = require("scripts.scenes.game_scene")
