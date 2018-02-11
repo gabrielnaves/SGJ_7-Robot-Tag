@@ -22,7 +22,7 @@ game_scene.robot_data = {
 }
 
 function game_scene:load()
-    local robot_count = 0
+    self.robot_count = 0
     self.robots = {}
     for i, data in ipairs(self.robot_data) do
         self.robots[i] = require('scripts.game_scene.robot')
@@ -30,9 +30,10 @@ function game_scene:load()
         self.robots[i].input = data.input
         self.robots[i].flip = data.flip
         package.loaded['scripts.game_scene.robot'] = nil
-        robot_count = robot_count + 1
+        self.robot_count = self.robot_count + 1
     end
-    self.robots[love.math.random(1, robot_count)].tagged = true
+    self.tagged_robot = love.math.random(1, self.robot_count)
+    self.robots[self.tagged_robot].tagged = true
 end
 
 function game_scene:update(dt)

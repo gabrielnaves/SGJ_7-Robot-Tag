@@ -45,6 +45,8 @@ function robot:load(robot_image, x, y)
 
     -- Tag
     self.tagged = false
+    self.tagTime = 1
+    self.tagTimer = 0
 
     self:changeState(self.states.grounded, self.updateGrounded)
 end
@@ -60,6 +62,7 @@ function robot:update(dt)
     self:checkDash(dt)
     self:updateFunction(dt)
     self:updateBasicMotion(dt)
+    self:collideWithRobots(dt)
 end
 
 function robot:checkDash(dt)
@@ -155,6 +158,26 @@ function robot:updateFlip(dt)
         self.flip = false
     elseif self.velocity.x < 0 then
         self.flip = true
+    end
+end
+
+function robot:collideWithRobots(dt)
+    if not self.tagged then return end
+    if current_scene == nil then return end
+    if current_scene.name ~= 'game' then return end
+
+    self.tagTimer = self.tagTimer + dt
+    if self.tagTimer > self.tagTime then
+        for i, robot in ipairs(current_scene.robots) do
+            if robot ~= self then
+                if geometry.overlappingRects(robot.rect, self.rect) then
+                    robot.tagged = true
+                    self.tagged = false
+                    self.tagTimer = 0
+                    return
+                end
+            end
+        end
     end
 end
 

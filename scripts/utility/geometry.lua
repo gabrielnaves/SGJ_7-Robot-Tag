@@ -16,3 +16,13 @@ function geometry.isPointInRect(point, rect)
     return point.x > rx and point.x < rx+rect.width and
            point.y > ry and point.y < ry+rect.height
 end
+
+function geometry.overlappingRects(rect1, rect2)
+    local rx1 = rect1.x - rect1.width*rect1.pivotX
+    local ry1 = rect1.y - rect1.height*rect1.pivotY
+    local rx2 = rect2.x - rect2.width*rect2.pivotX
+    local ry2 = rect2.y - rect2.height*rect2.pivotY
+
+    return rx2 < rx1+rect1.width and rx1 < rx2+rect2.width and
+           ry2 < ry1+rect1.height and ry1 < ry2+rect2.height
+end
