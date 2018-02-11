@@ -16,6 +16,7 @@ function robot:load(robot_image, x, y)
 
     -- Motion data
     self.rect = geometry.makeRect(x, y, self.frame_width-6, self.frame_height, 0.5, 1)
+    self.previousPosition = geometry.makePoint(x, y)
     self.gravity = 4000
     self.max_speed = 400
     self.offset_bound = 20
@@ -52,6 +53,9 @@ function robot:load(robot_image, x, y)
 end
 
 function robot:changeState(state, updateFunction)
+    if state == self.states.grounded then
+        self.double_jump = true
+    end
     self.state = state
     self.updateFunction = updateFunction
     self.ascendTimer = 0
@@ -148,8 +152,11 @@ function robot:updatePosition(dt)
     if self.rect.y > measure.screen_height then
         self.rect.y = measure.screen_height - 4
         self.velocity.y = 0
-        self.double_jump = true
         self:changeState(self.states.grounded, self.updateGrounded)
+    elseif self.rect.y - self.rect.height < 0 then
+        self.rect.y = self.rect.height
+        self.velocity.y = 0
+        self:changeState(self.states.falling, self.updateFalling)
     end
 end
 
@@ -179,6 +186,11 @@ function robot:updateTag(dt)
             end
         end
     end
+end
+
+function robot:lateUpdate(dt)
+    self.previousPosition.x = self.rect.x
+    self.previousPosition.y = self.rect.y
 end
 
 function robot:draw()

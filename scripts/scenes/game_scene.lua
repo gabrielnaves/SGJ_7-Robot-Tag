@@ -1,6 +1,7 @@
 require("scripts.game_scene.robot_bulb")
 require("scripts.game_scene.tag_mark")
 require("scripts.game_scene.score")
+require("scripts.game_scene.platforms")
 
 local game_scene = {}
 
@@ -44,6 +45,13 @@ function game_scene:update(dt)
         robot:update(dt)
     end
     tag_mark:update(dt)
+    platforms:update(self.robots)
+end
+
+function game_scene:lateUpdate(dt)
+    for i, robot in ipairs(self.robots) do
+        robot:lateUpdate(dt)
+    end
 end
 
 function game_scene:draw(dt)
@@ -51,6 +59,7 @@ function game_scene:draw(dt)
         robot:draw()
     end
     score:draw()
+    platforms:draw()
     self.walls:draw()
 end
 
