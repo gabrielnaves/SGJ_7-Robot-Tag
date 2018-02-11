@@ -15,7 +15,7 @@ function robot:load(robot_image, x, y)
     self.flip = false
 
     -- Motion data
-    self.rect = geometry.makeRect(x, y, self.frame_width, self.frame_height, 0.5, 1)
+    self.rect = geometry.makeRect(x, y, self.frame_width-6, self.frame_height, 0.5, 1)
     self.gravity = 4000
     self.max_speed = 400
     self.offset_bound = 20
@@ -182,8 +182,8 @@ function robot:collideWithRobots(dt)
 end
 
 function robot:draw(dt)
-    local draw_x = math.floor(self.rect.x - self.rect.width*self.rect.pivotX)
-    local draw_y = math.floor(self.rect.y - self.rect.height*self.rect.pivotY)
+    local draw_x = math.floor(self.rect.x - self.frame_width / 2)
+    local draw_y = math.floor(self.rect.y - self.frame_height)
     local frame = 1
 
     if self.input:horizontalAxis() ~= 0 then frame = 2 end
