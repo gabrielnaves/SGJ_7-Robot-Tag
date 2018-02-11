@@ -50,6 +50,8 @@ function menu_scene:update(dt)
             self.player_amount = gamemath.clamp(self.player_amount+1, 4, 2)
         elseif geometry.isPointInRect(geometry.makePoint(mouse.mouseX, mouse.mouseY), self.left_arrow_rect) then
             self.player_amount = gamemath.clamp(self.player_amount-1, 4, 2)
+        elseif geometry.isPointInRect(geometry.makePoint(mouse.mouseX, mouse.mouseY), self.play_rect) then
+            current_scene = require("scripts.scenes.game_scene")
         end
     end
 end
