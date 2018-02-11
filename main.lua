@@ -5,6 +5,7 @@ require("scripts.utility.geometry")
 require("scripts.utility.still_image")
 require("scripts.utility.still_animation")
 require("scripts.utility.input")
+require("scripts.utility.text")
 
 local background = nil
 
@@ -13,7 +14,7 @@ player_amount = 2
 function love.load(arg)
     font = love.graphics.newImageFont("assets/font.png",
         " abcdefghijklmnopqrstuvwxyz" .. "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ..
-        "0123456789" .. ":.,")
+        "0123456789" .. ":.,!")
     font:setFilter('linear', 'nearest')
     love.graphics.setFont(font)
 

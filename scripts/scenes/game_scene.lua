@@ -40,7 +40,6 @@ game_scene.robot_data = {
 function game_scene:load()
     self.robots = {}
     for i, data in ipairs(self.robot_data) do
-        if i > player_amount then break end
         self.robots[i] = require('scripts.game_scene.robot')
         self.robots[i]:load(data.img, data.x, data.y)
         self.robots[i].input = data.input
@@ -54,22 +53,22 @@ end
 
 function game_scene:update(dt)
     score:update(dt)
-    for i, robot in ipairs(self.robots) do
-        robot:update(dt)
+    for i=1,player_amount do
+        self.robots[i]:update(dt)
     end
     tag_mark:update(dt)
     platforms:update(self.robots)
 end
 
 function game_scene:lateUpdate(dt)
-    for i, robot in ipairs(self.robots) do
-        robot:lateUpdate(dt)
+    for i=1,player_amount do
+        self.robots[i]:lateUpdate(dt)
     end
 end
 
 function game_scene:draw()
-    for i, robot in ipairs(self.robots) do
-        robot:draw()
+    for i=1,player_amount do
+        self.robots[i]:draw()
     end
     score:draw()
     platforms:draw()
@@ -77,6 +76,12 @@ function game_scene:draw()
 end
 
 function game_scene:restart()
+    for i, robot in ipairs(self.robots) do
+        robot:load(self.robot_data[i].img, self.robot_data[i].x, self.robot_data[i].y)
+        robot.input = self.robot_data[i].input
+        robot.flip = self.robot_data[i].flip
+    end
+    self.robots[love.math.random(1, player_amount)].tagged = true
 end
 
 

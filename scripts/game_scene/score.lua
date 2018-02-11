@@ -23,7 +23,7 @@ score.scores = {
     }
 }
 
-score.time = 121
+score.time = 10
 score.timer = score.time
 
 function score:update(dt)
@@ -36,6 +36,10 @@ function score:update(dt)
         end
     end
     self.timer = self.timer - dt
+    if self.timer < 0 then
+        current_scene:restart()
+        current_scene = require('scripts.scenes.end_scene')
+    end
 end
 
 function score:draw()
@@ -52,4 +56,11 @@ function score:drawGameTime()
     local text = tostring(math.floor(self.timer))
     local draw_x = measure.screen_width/2 - font:getWidth(text)
     love.graphics.print({{255, 255, 255}, text}, draw_x, 10, 0, 2, 2)
+end
+
+function score:restart()
+    self.timer = self.time
+    for i, score in ipairs(self.scores) do
+        score.tag_time = 0
+    end
 end

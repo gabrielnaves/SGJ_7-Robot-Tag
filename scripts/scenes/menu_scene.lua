@@ -86,7 +86,7 @@ end
 
 function menu_scene:drawPlayButton()
     self.play_button:draw()
-    local play_text = "Play"
+    local play_text = "Play!"
     local draw_x = measure.screen_width/2 - font:getWidth(play_text)
     local draw_y = self.play_button.y - font:getHeight(play_text)
     love.graphics.print({{0, 0, 0}, tostring(play_text)}, math.floor(draw_x), math.floor(draw_y), 0, 2, 2)
