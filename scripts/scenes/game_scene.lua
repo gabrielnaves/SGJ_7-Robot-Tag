@@ -54,7 +54,7 @@ function game_scene:lateUpdate(dt)
     end
 end
 
-function game_scene:draw(dt)
+function game_scene:draw()
     for i, robot in ipairs(self.robots) do
         robot:draw()
     end

@@ -12,11 +12,12 @@ function love.load(arg)
     font = love.graphics.newImageFont("assets/font.png",
         " abcdefghijklmnopqrstuvwxyz" .. "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ..
         "0123456789" .. ":.,")
+    font:setFilter('linear', 'nearest')
     love.graphics.setFont(font)
 
     background = still_image.new('background.png')
 
-    current_scene = require("scripts.scenes.game_scene")
+    current_scene = require("scripts.scenes.menu_scene")
 end
 
 function love.update(dt)
