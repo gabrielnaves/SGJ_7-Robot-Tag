@@ -22,14 +22,14 @@ game_scene.robot_data = {
         flip = true
     },
     {
-        img = 'assets/robot_blue.png',
+        img = 'assets/robot_green.png',
         x = 50,
         y = 219,
         input = newInputHandler('t', 'g', 'f', 'h', 'c', 'x'),
         flip = false
     },
     {
-        img = 'assets/robot_blue.png',
+        img = 'assets/robot_pink.png',
         x = measure.screen_width - 50,
         y = 147,
         input = newInputHandler('i', 'k', 'j', 'l', 'b', 'v'),
