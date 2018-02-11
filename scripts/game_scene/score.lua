@@ -23,7 +23,7 @@ score.scores = {
     }
 }
 
-score.time = 10
+score.time = 101
 score.timer = score.time
 
 function score:update(dt)
