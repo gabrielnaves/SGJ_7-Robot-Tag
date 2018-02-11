@@ -8,6 +8,8 @@ require("scripts.utility.input")
 
 local background = nil
 
+player_amount = 2
+
 function love.load(arg)
     font = love.graphics.newImageFont("assets/font.png",
         " abcdefghijklmnopqrstuvwxyz" .. "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ..

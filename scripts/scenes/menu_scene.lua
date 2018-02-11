@@ -37,8 +37,6 @@ menu_scene.left_arrow_rect = geometry.makeRect(menu_scene.left_arrow.x, menu_sce
                                                menu_scene.left_arrow.width, menu_scene.left_arrow.height,
                                                menu_scene.left_arrow.pivotX, menu_scene.left_arrow.pivotY)
 
-menu_scene.player_amount = 2
-
 menu_scene.play_button = still_image.new('play_button.png', measure.screen_width/2, measure.screen_height - 50, 0.5, 0.5)
 menu_scene.play_rect = geometry.makeRect(menu_scene.play_button.x, menu_scene.play_button.y,
                                          menu_scene.play_button.width, menu_scene.play_button.height,
@@ -47,9 +45,9 @@ menu_scene.play_rect = geometry.makeRect(menu_scene.play_button.x, menu_scene.pl
 function menu_scene:update(dt)
     if mouse.mouseButtonDown then
         if geometry.isPointInRect(geometry.makePoint(mouse.mouseX, mouse.mouseY), self.right_arrow_rect) then
-            self.player_amount = gamemath.clamp(self.player_amount+1, 4, 2)
+            player_amount = gamemath.clamp(player_amount+1, 4, 2)
         elseif geometry.isPointInRect(geometry.makePoint(mouse.mouseX, mouse.mouseY), self.left_arrow_rect) then
-            self.player_amount = gamemath.clamp(self.player_amount-1, 4, 2)
+            player_amount = gamemath.clamp(player_amount-1, 4, 2)
         elseif geometry.isPointInRect(geometry.makePoint(mouse.mouseX, mouse.mouseY), self.play_rect) then
             current_scene = require("scripts.scenes.game_scene")
         end
@@ -70,15 +68,15 @@ function menu_scene:draw()
 end
 
 function menu_scene:drawPlayerAmount()
-    local draw_x = measure.screen_width/2 - font:getWidth(tostring(self.player_amount))/2
-        love.graphics.print({self.text_color, tostring(self.player_amount)},
+    local draw_x = measure.screen_width/2 - font:getWidth(tostring(player_amount))/2
+        love.graphics.print({self.text_color, tostring(player_amount)},
                             math.floor(draw_x), measure.screen_height/2-20, 0, 2, 2)
 end
 
 function menu_scene:drawPlayerInputs()
     local draw_y = measure.screen_height/2 + 60
     local draw_x = nil
-    for i=1,self.player_amount do
+    for i=1,player_amount do
         draw_x = measure.screen_width/2 - font:getWidth(self.player_input_texts[i])/2
         love.graphics.print({self.text_color, tostring(self.player_input_texts[i])},
                             math.floor(draw_x), draw_y)

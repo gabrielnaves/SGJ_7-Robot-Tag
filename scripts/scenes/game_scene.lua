@@ -38,17 +38,16 @@ game_scene.robot_data = {
 }
 
 function game_scene:load()
-    local robot_count = 0
     self.robots = {}
     for i, data in ipairs(self.robot_data) do
+        if i > player_amount then break end
         self.robots[i] = require('scripts.game_scene.robot')
         self.robots[i]:load(data.img, data.x, data.y)
         self.robots[i].input = data.input
         self.robots[i].flip = data.flip
         package.loaded['scripts.game_scene.robot'] = nil
-        robot_count = robot_count + 1
     end
-    self.robots[love.math.random(1, robot_count)].tagged = true
+    self.robots[love.math.random(1, player_amount)].tagged = true
 
     self.walls = still_image.new('walls.png', 0, 0, 0, 0)
 end
