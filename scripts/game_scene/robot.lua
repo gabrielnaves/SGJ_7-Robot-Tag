@@ -175,7 +175,8 @@ function robot:updateTag(dt)
 
     self.tagTimer = self.tagTimer + dt
     if self.tagTimer > self.tagTime then
-        for i, robot in ipairs(current_scene.robots) do
+        for i=1,player_amount do
+            local robot = current_scene.robots[i]
             if robot ~= self then
                 if geometry.overlappingRects(robot.rect, self.rect) then
                     robot.tagged = true
